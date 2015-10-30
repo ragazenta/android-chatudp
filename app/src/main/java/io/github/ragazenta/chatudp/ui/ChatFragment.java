@@ -4,6 +4,7 @@ package io.github.ragazenta.chatudp.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -76,7 +77,11 @@ public class ChatFragment extends BaseFragment implements ChatReceiver {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL_LIST));
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -97,5 +102,6 @@ public class ChatFragment extends BaseFragment implements ChatReceiver {
     @Override
     public void receiveMessage(Chat chat) {
         mAdapter.addData(chat);
+        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 }
